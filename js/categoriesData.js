@@ -1,30 +1,29 @@
-const mainData = () => {
+const categoriesData = () => {
 	const preloader = document.querySelector('.preloder');
 
 	const renderGanreList = (ganres) => {
 		const dropdownBlock = document.querySelector('.header__menu .dropdown');
 
-		ganres.forEach(ganre => {
+		ganres.forEach((ganre) => {
 			dropdownBlock.insertAdjacentHTML(
 				'beforeend',
 				`
 				   <li><a href="./categories.html?ganre=${ganre}">${ganre}</a></li>
 			`
 			);
-		})
-	}
-
+		});
+	};
 
 	const renderAnimeList = (array, ganres) => {
-		const wrapper = document.querySelector('.product .col-lg-8');
+		const wrapper = document.querySelector('.product-page .col-lg-8');
 
 		ganres.forEach((ganre) => {
 			const productBlock = document.createElement('div');
 			const listBlock = document.createElement('div');
-			const list = array.filter(item => item.ganre === ganre)
+			const list = array.filter((item) => item.tags.includes(ganre));
 
-			listBlock.classList.add('row')
-			productBlock.classList.add('mb-5')
+			listBlock.classList.add('row');
+			productBlock.classList.add('mb-5');
 
 			productBlock.insertAdjacentHTML(
 				'beforeend',
@@ -45,17 +44,18 @@ const mainData = () => {
 			`
 			);
 
-			list.forEach(item => {
+			list.forEach((item) => {
+				const tagsBlock = document.createElement('ul');
 
-				const tagsBlock = document.createElement('ul')
-
-				item.tags.forEach(tag => {
-					tagsBlock.insertAdjacentHTML('afterbegin', `
+				item.tags.forEach((tag) => {
+					tagsBlock.insertAdjacentHTML(
+						'afterbegin',
+						`
 						<li>${tag}</li>
 					
-					`)
-				})
-
+					`
+					);
+				});
 
 				listBlock.insertAdjacentHTML(
 					'beforeend',
@@ -76,7 +76,7 @@ const mainData = () => {
                             </div>
 				`
 				);
-			})
+			});
 
 			productBlock.append(listBlock);
 			wrapper.append(productBlock);
@@ -118,15 +118,24 @@ const mainData = () => {
 		.then((response) => response.json())
 		.then((data) => {
 			const ganres = new Set();
-			
+			const ganreParams = new URLSearchParams(window.location.search).get(
+				'ganre'
+			);
+
 			data.anime.forEach((item) => {
 				ganres.add(item.ganre);
 			});
 
-			renderTopAnime(data.anime.sort((a, b) => b.views - a.views).slice(0, 5));
-			renderAnimeList(data.anime, ganres);
-			renderGanreList(ganres)
+			renderTopAnime(
+				data.anime.sort((a, b) => b.views - a.views).slice(0, 5)
+			);
+			if (ganreParams) {
+				renderAnimeList(data.anime, [ganreParams]);
+			} else {
+				renderAnimeList(data.anime, ganres);
+			}
+			renderGanreList(ganres);
 		});
 };
 
-mainData();
+categoriesData();
