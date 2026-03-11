@@ -79,8 +79,13 @@
             display: block;
             z-index: 1;
         }
+
+        &.arrow_carrot-right {
+            transform: rotate(45deg);
+        }
     }
 }
+
 
 .hero__items {
     padding: 250px 0 42px 50px;
@@ -192,4 +197,5 @@
         }
     }
 }
+
 

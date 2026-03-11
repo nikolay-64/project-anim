@@ -23,6 +23,7 @@ const detailData = () => {
         const subTitleBlock = document.querySelector('.anime__details__title span');
         const descriptionBlock = document.querySelector('.anime__details__text p');
         const widgetList = document.querySelectorAll('.anime__details__widget ul li');
+		const breadcrumbLinks = document.querySelectorAll('.breadcrumb__links a');
         const breadcrumb = document.querySelector('.breadcrumb__links span');
 
         if (animeObj) {
@@ -57,6 +58,7 @@ const detailData = () => {
             `
 			);
 
+			breadcrumbLinks[1].outerHTML = `<a href="./categories.html?ganre=${animeObj.ganre}">Categories</a>`;
 			breadcrumb.textContent = animeObj.ganre
 
            document.querySelectorAll('.set-bg').forEach((element) => {
